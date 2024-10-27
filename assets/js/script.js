@@ -70,7 +70,19 @@ const reqCity = async (cityName) => {
 
 // display current weather
 const getCurrent = async (lat, lon) => {
-
+  try {
+    const response = await fetch(currentWeatherReq(lat, lon))
+    const weather = await response.json()
+    if (weather !== null) {
+      $('#dateToday').html(dayjs(weather.dt_txt).format('MM-DD-YYYY'))
+      $('#city').html(weather.name.toUpperCase())
+      $('#temp').html(`${Math.floor(weather.main.temp)}&deg;`)
+      $('#humidity').html(`${weather.main.humidity} %`)
+      $('#wind').html(`${weather.wind.speed.toFixed(1)} mph`)
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const getForecast = async (lat, lon) => {
