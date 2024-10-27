@@ -1,8 +1,8 @@
-div {
+/* div {
   border: 1px;
   border-color: blue;
   border-style: solid;
-}
+} */
 
 input {
   width: 100%;
@@ -14,5 +14,5 @@ input {
 }
 
 #sidebar {
-  border-right: 2px ridge black;
+  border-right: 2px solid gray;
 }
