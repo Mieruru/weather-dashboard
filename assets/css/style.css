@@ -3,3 +3,16 @@ div {
   border-color: blue;
   border-style: solid;
 }
+
+input {
+  width: 100%;
+}
+
+.btn {
+  width: 100%;
+  margin: 2px 0;
+}
+
+#sidebar {
+  border-right: 2px ridge black;
+}

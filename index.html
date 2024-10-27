@@ -15,43 +15,53 @@
 
     <!-- header -->
     <div class="row">
-      <div class="col">
+      <div class="col bg-primary-subtle">
         <h1>Weather Dashboard</h1>
       </div>
     </div>
 
     <!-- main -->
-    <div class="row">
+    <div class="row" id="main">
 
       <!-- sidebar -->
-      <div class="col">
+      <div class="col-sm-2" id="sidebar">
 
         <!-- search form -->
         <div class="row">
-
+          <form>
+            <input type="text" class="input" placeholder="City Name">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
         </div>
 
         <!-- divider -->
-        <div class="row">
+        <div class="divider">
 
         </div>
 
         <!-- search history -->
         <div class="row">
-
+          <div class="col">
+            Past searches go here
+          </div>
         </div>
       </div>
 
       <!-- weather section -->
-      <div class="col">
+      <div class="col-sm-10">
+        <div class="row">
+          <div class="col bg-secondary-subtle m-2 p-2 rounded-3">
+            Weather Card
+          </div>
+        </div>
 
         <!-- current forecast card -->
         <div class="row">
 
         </div>
         <!-- separator -->
-        <div class="row">
-          <h3>5-day Forecast:</h3>
+        <div class="row text-start">
+          <h4>5-day Forecast:</h3>
         </div>
         <!-- 5-day forecast cards -->
         <div class="row">
