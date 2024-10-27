@@ -11,6 +11,11 @@ const apiKey = '2301593fc1c038267904bbec75062ee9'
 // define array for cities
 let citiesArray = JSON.parse(localStorage.getItem('citiesArray') || '[]')
 
+// define URL for city request
+const cityReq = function (cityName) {
+  return `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${APIKey}`
+}
+
 // define URL for weather request
 const currentWeatherReq = function (lat, lon) {
   return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}`
@@ -38,7 +43,29 @@ const updateLocalStorage = (cityObj) => {
 
 // search city to retrieve data
 const reqCity = async (cityName) => {
+  try {
+    const response = await fetch(cityReq(cityName))
+    const data = await response.json()
+    if (data && data.length > 0) {
+      let city = data[0]
 
+      // city data object
+      let cityObj = {
+        city: city.name,
+        lat: city.lat,
+        lon: city.lon
+      }
+
+      // push city object to array
+      updateLocalStorage(cityObj)
+
+      // generate previous searches
+      getSearchHistory()
+      return city
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 // display current weather
@@ -48,6 +75,25 @@ const getCurrent = async (lat, lon) => {
 
 const getForecast = async (lat, lon) => {
 
+}
+
+// display search history
+const getSearchHistory = () => {
+  // retrieve cities array from localstorage
+  $('#searchHistory').empty()
+  const searchHistory = JSON.parse(localStorage.getItem(citiesArray)) || []
+
+  // loop through array and create element for each city in the array
+  for (const city of searchHistory) {
+    const cityEl = $('<button>')
+      .addClass(
+        'btn-secondary'
+      )
+      .attr('data-city', city.city)
+      .attr('data-action', 'searchCity')
+      .text(city.city.toUpperCase())
+    $('#searchHistory').append(cityEl)
+  }
 }
 
 // form submission
@@ -68,3 +114,4 @@ const handleFormSubmit = (event) => {
   // clear input field
   cityInputEl.value = ''
 }
+
