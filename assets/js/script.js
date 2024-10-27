@@ -8,6 +8,9 @@ const forecastFieldEl = document.getElementById('forecastField')
 // define API key
 const apiKey = '2301593fc1c038267904bbec75062ee9'
 
+// define array for cities
+let citiesArray = JSON.parse(localStorage.getItem('citiesArray') || '[]')
+
 // define URL for weather request
 const currentWeatherReq = function (lat, lon) {
   return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}`
@@ -16,6 +19,21 @@ const currentWeatherReq = function (lat, lon) {
 // define URL for forecast request
 const forecastReq = function (lat, lon) {
   return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${APIkey}`
+}
+
+// manage localstorage
+const updateLocalStorage = (cityObj) => {
+  // set lat and lon of city
+  let lat = cityObj.lat
+  let lon = cityObj.lon
+
+  // push city to array
+  let cityName = cityObj.city
+  let city = citiesArray.find((obj) => obj.city === cityName)
+  if (!city) {
+    citiesArray.push(cityObj)
+    localStorage.setItem('citiesArray', JSON.stringify(citiesArray))
+  }
 }
 
 // search city to retrieve data
