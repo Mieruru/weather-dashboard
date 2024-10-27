@@ -29,8 +29,8 @@
         <!-- search form -->
         <div class="row">
           <form>
-            <input type="text" class="input" placeholder="City Name">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <input id="cityInput" type="text" class="input" placeholder="City Name">
+            <button id="cityInputBtn" type="submit" class="btn btn-primary">Search</button>
           </form>
         </div>
 
@@ -41,7 +41,7 @@
 
         <!-- search history -->
         <div class="row flex-grow-1">
-          <div class="col">
+          <div id="searchHistory" class="col">
             Past searches go here
           </div>
         </div>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- current forecast card -->
-        <div class="row">
+        <div id="currentWeather" class="row">
 
         </div>
         <!-- separator -->
@@ -64,7 +64,7 @@
           <h4>5-day Forecast:</h3>
         </div>
         <!-- 5-day forecast cards -->
-        <div class="row flex-grow-1">
+        <div id="forecastField" class="row flex-grow-1">
 
         </div>
 
