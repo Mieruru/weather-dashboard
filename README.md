@@ -4,7 +4,7 @@
 
 ## Description
 
-A simple weather app that can display the local weather based on a search input, as well as provide a 5-day forecast. This app also saves previously searched locations, and can quickly perform a local weather query for those locations by clicking on dynamically-generated buttons. This app pulls data from openweathermap.org to populate its weather data.
+A simple weather app that can display the local weather based on a search input, as well as provide a 5-day forecast. This app also saves previously searched locations, and can quickly perform a local weather query for those locations by clicking on dynamically-generated buttons. This app pulls data from openweathermap.org to populate its weather data. 
 
 ## Sample Images
 
