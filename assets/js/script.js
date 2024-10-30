@@ -24,7 +24,7 @@ const currentWeatherReq = function (lat, lon) {
 
 // define URL for forecast request
 const forecastReq = function (lat, lon) {
-  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${apiKey}`
+  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${apiKey}&units=imperial`
 }
 
 // manage localstorage
@@ -105,7 +105,7 @@ const getSearchHistory = () => {
         'btn btn-secondary'
       )
       .attr('data-city', city.city)
-      .attr('data-action', 'searchCity')
+      .attr('data-action', 'reqCity')
       .text(city.city.toUpperCase())
     $('#searchHistory').append(cityEl)
   }
