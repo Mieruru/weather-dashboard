@@ -1,5 +1,6 @@
 // define page elements
 const cityInputEl = document.getElementById('cityInput')
+const searchForm = document.getElementById('searchForm')
 const submitBtnEl = document.getElementById('cityInputBtn')
 const searchHistoryEl = document.getElementById('searchHistory')
 const currentWeatherCardEl = document.getElementById('currentWeather')
@@ -13,17 +14,17 @@ let citiesArray = JSON.parse(localStorage.getItem('citiesArray') || '[]')
 
 // define URL for city request
 const cityReq = function (cityName) {
-  return `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${APIKey}`
+  return `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${apiKey}`
 }
 
 // define URL for weather request
 const currentWeatherReq = function (lat, lon) {
-  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}`
+  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 }
 
 // define URL for forecast request
 const forecastReq = function (lat, lon) {
-  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${APIkey}`
+  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${apiKey}`
 }
 
 // manage localstorage
@@ -72,13 +73,15 @@ const reqCity = async (cityName) => {
 const getCurrent = async (lat, lon) => {
   try {
     const response = await fetch(currentWeatherReq(lat, lon))
-    const weather = await response.json()
-    if (weather !== null) {
-      $('#dateToday').html(dayjs(weather.dt_txt).format('MM-DD-YYYY'))
-      $('#city').html(weather.name.toUpperCase())
-      $('#temp').html(`${Math.floor(weather.main.temp)}&deg;`)
-      $('#humidity').html(`${weather.main.humidity} %`)
-      $('#wind').html(`${weather.wind.speed.toFixed(1)} mph`)
+    console.log(response)
+    const weatherJSON = await response.json()
+    if (weatherJSON !== null) {
+      console.log(weatherJSON)
+      $('#dateToday').html(dayjs(weatherJSON.dt_txt).format('MM-DD-YYYY'))
+      $('#city').html(weatherJSON.city.name.toUpperCase())
+      $('#temp').html(`${Math.floor(weatherJSON.list[0].main.temp)}&deg;`)
+      $('#wind').html(`${weatherJSON.list[0].wind.speed.toFixed(1)} mph`)
+      $('#humidity').html(`${weatherJSON.list[0].main.humidity} %`)
     }
   } catch (err) {
     console.error(err)
@@ -93,13 +96,13 @@ const getForecast = async (lat, lon) => {
 const getSearchHistory = () => {
   // retrieve cities array from localstorage
   $('#searchHistory').empty()
-  const searchHistory = JSON.parse(localStorage.getItem(citiesArray)) || []
+  const searchHistory = JSON.parse(localStorage.getItem('citiesArray')) || []
 
   // loop through array and create element for each city in the array
   for (const city of searchHistory) {
     const cityEl = $('<button>')
       .addClass(
-        'btn-secondary'
+        'btn btn-secondary'
       )
       .attr('data-city', city.city)
       .attr('data-action', 'searchCity')
@@ -127,3 +130,6 @@ const handleFormSubmit = (event) => {
   cityInputEl.value = ''
 }
 
+document.addEventListener('click', function (event) {
+  $(submitBtnEl).on('click', handleFormSubmit)
+})
