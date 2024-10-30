@@ -19,12 +19,12 @@ const cityReq = function (cityName) {
 
 // define URL for weather request
 const currentWeatherReq = function (lat, lon) {
-  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
+  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=1&appid=${apiKey}&units=imperial`
 }
 
 // define URL for forecast request
 const forecastReq = function (lat, lon) {
-  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=5&appid=${apiKey}&units=imperial`
+  return `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 }
 
 // manage localstorage
@@ -44,7 +44,6 @@ const updateLocalStorage = (cityObj) => {
 
 // search city to retrieve data
 const reqCity = async (cityName) => {
-  console.log('button pressed!')
   try {
     const response = await fetch(cityReq(cityName))
     const data = await response.json()
@@ -80,8 +79,10 @@ const getCurrent = async (lat, lon) => {
       console.log(weatherJSON)
       $('#dateToday').html(dayjs(weatherJSON.dt_txt).format('MM-DD-YYYY'))
       $('#city').html(weatherJSON.city.name.toUpperCase())
+      // $('#weatherIcon').html(weatherJSON.list[0].weather[0].icon + '.png')
+      $('#weatherIcon').html(`<img src="https://openweathermap.org/img/wn/${weatherJSON.list[0].weather[0].icon}@2x.png" /> ${weatherJSON.list[0].weather[0].description}`)
       $('#temp').html(`${Math.floor(weatherJSON.list[0].main.temp)}&deg;`)
-      $('#wind').html(`${weatherJSON.list[0].wind.speed.toFixed(1)} mph`)
+      $('#wind').html(`WIND: ${weatherJSON.list[0].wind.speed.toFixed(1)} mph`)
       $('#humidity').html(`${weatherJSON.list[0].main.humidity} %`)
     }
   } catch (err) {
@@ -90,7 +91,43 @@ const getCurrent = async (lat, lon) => {
 }
 
 const getForecast = async (lat, lon) => {
+  try {
+    const response = await fetch(forecastReq(lat, lon))
+    const forecastJSON = await response.json()
 
+    if (forecastJSON.list && forecastJSON.list.length > 0) {
+      const list = forecastJSON.list
+      let forecastArray = []
+      for (const days of list) {
+        if (dayjs(days.dt_txt).format('HH:mm:ss') === '12:00:00') {
+          const forecastObj = {
+            dayOfWeek: dayjs(days.dt_txt).format('MM-DD-YYYY'),
+            tempHigh: Math.floor(days.main.temp_max),
+            icon: days.weather[0].icon,
+            description: days.weather[0].description,
+            humidity: days.main.humidity,
+            wind: days.wind.speed.toFixed(1),
+          }
+          forecastArray.push(forecastObj)
+          console.log(forecastArray)
+        }
+      }
+
+      $('#forecastField').empty()
+      for (const day of forecastArray) {
+        const forecastDiv = $('<div>').addClass('bg-secondary-subtle d-flex flex-column justify-content-center align-items-center forecast__card m-2 p-2');
+        const dayOfWeek = $('<span>').text(day.dayOfWeek);
+        const iconContainer = $('<div>').addClass('forecast-icon-container').html(`<img src="https://openweathermap.org/img/wn/${day.icon}.png" /> ${day.description}`);
+        const tempHigh = $('<span>').html(`${day.tempHigh}&deg;`);
+        const humidity = $('<div>').html(`HUMIDITY: ${day.humidity} %`);
+        const wind = $('<div>').html(`WIND: ${day.wind} mph`);
+        forecastDiv.append(dayOfWeek, iconContainer, tempHigh, wind, humidity);
+        $('#forecastField').append(forecastDiv);
+      }
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 // display search history
