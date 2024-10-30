@@ -90,6 +90,7 @@ const getCurrent = async (lat, lon) => {
   }
 }
 
+// display 5 day forecast
 const getForecast = async (lat, lon) => {
   try {
     const response = await fetch(forecastReq(lat, lon))
@@ -168,14 +169,17 @@ const handleFormSubmit = (event) => {
   cityInputEl.value = ''
 }
 
+// page load function to display search history
 $(document).ready(function () {
   getSearchHistory()
 })
 
+// search button event listener
 document.addEventListener('click', function () {
   $(submitBtnEl).on('click', handleFormSubmit)
 })
 
+// history buttons event listener
 document.addEventListener('click', function (event) {
   if (event.target.classList.contains('search-city')) {
     const city = event.target.getAttribute('data-city');
