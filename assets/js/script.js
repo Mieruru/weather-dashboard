@@ -44,6 +44,7 @@ const updateLocalStorage = (cityObj) => {
 
 // search city to retrieve data
 const reqCity = async (cityName) => {
+  console.log('button pressed!')
   try {
     const response = await fetch(cityReq(cityName))
     const data = await response.json()
@@ -102,7 +103,7 @@ const getSearchHistory = () => {
   for (const city of searchHistory) {
     const cityEl = $('<button>')
       .addClass(
-        'btn btn-secondary'
+        'btn btn-secondary search-city'
       )
       .attr('data-city', city.city)
       .attr('data-action', 'reqCity')
@@ -130,6 +131,22 @@ const handleFormSubmit = (event) => {
   cityInputEl.value = ''
 }
 
-document.addEventListener('click', function (event) {
+document.addEventListener('click', function () {
   $(submitBtnEl).on('click', handleFormSubmit)
 })
+
+document.addEventListener('click', function (event) {
+  if (event.target.classList.contains('search-city')) {
+    const city = event.target.getAttribute('data-city');
+    const action = event.target.getAttribute('data-action');
+
+    if (action === 'reqCity') {
+      reqCity(city).then((cityData) => {
+        if (cityData) {
+          getCurrent(cityData.lat, cityData.lon);
+          getForecast(cityData.lat, cityData.lon);
+        }
+      });
+    }
+  }
+});
