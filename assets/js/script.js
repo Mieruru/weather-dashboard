@@ -168,6 +168,10 @@ const handleFormSubmit = (event) => {
   cityInputEl.value = ''
 }
 
+$(document).ready(function () {
+  getSearchHistory()
+})
+
 document.addEventListener('click', function () {
   $(submitBtnEl).on('click', handleFormSubmit)
 })
